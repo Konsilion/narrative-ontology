@@ -1,0 +1,254 @@
+@prefix : <https://dlnarratives.eu/ontology#> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://dlnarratives.eu/ontology> a owl:Ontology ;
+    rdfs:label "DL Narratives Ontology (local module)"@en ;
+    rdfs:comment "\"module-base\" variant: back to the state of the initial cleanup (Nov 11, 2026). Differences from narrative-ontology-module.owl: the Media class (the whole media) has been removed — fragments (MediaFragment and its subclasses) sit directly under the Entity root; the RelationReifiee grouping class has been removed — ActorWithRole and Proposition sit directly under the root, as under Entity in the published NOnt. On Nov 14, 2026 (user decision) the bare local root Element was renamed to Entity and anchored with the axiom ≡ E1_CRM_Entity (the official NOnt alias, resolving the former IRI collision), and Event moved from ⊑ E5 to ≡ E5 — back to the official NOnt architecture (Entity ≡ E1, Event ≡ E5); the equivalence propagates no pollution since E5 ⊑ E1 already holds in the CRM. CRM anchors and property domains/ranges are unchanged."@en,
+        "Narrative ontology of the DL Narratives project (dlnarratives.eu), local module. Extracted from the original narrative-ontology-original.owl: the 7 narrative classes of the published ontology are kept (ActorWithRole, Event, Fabula, Narration, Narrative, Proposition, Role), plus the grouping root Entity, a pure alias equivalent to E1_CRM_Entity as in the published NOnt (on Nov 14, 2026 the bare local root Element was renamed to Entity and anchored on E1 by user decision, so that the Event equivalence to E5 propagates no pollution); the Biography class (subclass of Narrative in the published ontology) has been removed by user decision; the 21 narrative properties with proper content are kept (20 object properties, among which after and before, plus the data property hasDescription), re-anchored on CIDOC-CRM 7.1.1 (the original file embedded an obsolete Erlangen CRM copy and stubs of CRMinf, CRMsci, CRMgeo and FRBRoo, which have been removed). The original logic (subClassOf, domains, ranges, subPropertyOf) is preserved; anchors that do not exist in CRM 7.1.1 have been remapped to their closest CRM ancestor, as documented in each entity comment. Local extension: media fragments (MediaFragment, TextFragment, ImageFragment, AudioFragment, VideoFragment, hasFragment, hasLocator) allow propositions to be anchored in any medium, using the W3C Media Fragments URI syntax (#char= being RFC 5147); the original property hasTextFragment has been removed, all media being cited through the generic hasFragment. On Nov 14, 2026 the property signatures were recabled on the nar: classes (domains and ranges point to nar:Event and nar:Entity instead of E5_Event and E1_CRM_Entity — neutral for the reasoner since Event ≡ E5 and Entity ≡ E1, and faithful to the published NOnt whose properties point to its own classes); the direct subClassOf E1 anchors of ActorWithRole, Proposition and Role were dropped as redundant (they already sit under nar:Entity). WARNING: never load the published narrativeOntology.owl together with this module: it embeds an obsolete Erlangen-anchored CRM copy that would create a second, non-merging CRM namespace alongside the official 7.1.1 import (the former meaning collision on the Entity and Event IRIs was resolved on Nov 14, 2026 by restoring the official axioms Entity ≡ E1 and Event ≡ E5)."@en,
+        "Revision of Nov 14, 2026 (current file, former module-base-v2): the four media fragments are subclasses of MediaFragment — TextFragment (⊑ E33 Linguistic Object), ImageFragment (⊑ E36 Visual Item), AudioFragment and VideoFragment (no dedicated CRM anchor: the CRM has no audio or video class; user decision, anchor possible later). The thesaurus-narrative.ttl file (Thesaurus/thesaurus-narrative.ttl, level .../thesaurus/narratif#) is NOT used for the medium: it carries the role types (Organisateur, Chroniqueur, Expert) instantiated by the Role individuals of a narrative via P2 has type. No other change from module-base."@en,
+        "Révision du 14/11/2026 (fichier courant, ex-module-base-v2) : les quatre fragments média sont des sous-classes de MediaFragment — TextFragment (⊑ E33_Linguistic_Object), ImageFragment (⊑ E36_Visual_Item), AudioFragment et VideoFragment (sans ancrage CRM dédié : le CRM n'a pas de classe audio ni vidéo ; décision utilisateur, ancrage possible plus tard). Le thésaurus thesaurus-narrative.ttl (fichier Thesaurus/thesaurus-narrative.ttl, niveau .../thesaurus/narratif#) n'est PAS utilisé pour le média : il porte les types des rôles (Organisateur, Chroniqueur, Expert) instanciés par les individus Role du récit via P2_has_type. Aucun autre changement par rapport à module-base."@fr,
+        "Variante « module-base » : retour à l'état du nettoyage initial (11/11/2026). Différences avec narrative-ontology-module.owl : la classe Media (le média complet) a été retirée — les fragments (MediaFragment et ses sous-classes) sont directement sous la racine Entity ; la classe de regroupement RelationReifiee a été retirée — ActorWithRole et Proposition sont directement sous la racine, comme sous Entity dans la version publiée de NOnt (où Fabula, Narrative et Narration sont sous Period, Information_Object et Individual_Work). Le niveau intermédiaire Entity (hérité du nettoyage initial) avait été supprimé le 14/11/2026, puis réintroduit le même jour (décision utilisateur) sous la forme de l'alias officiel : la racine locale Element est renommée Entity avec l'axiome ≡ E1_CRM_Entity, et Event passe de ⊑ E5 à ≡ E5 — retour à l'architecture de la NOnt publiée (Entity ≡ E1, Event ≡ E5), l'équivalence ne propage plus de pollution puisque E5 ⊑ E1 est déjà vrai dans le CRM. Les ancrages CRM, les domaines et les ranges des propriétés sont inchangés par rapport au module, sauf corrections d'audit du 14/11/2026 : after et before réintégrées (time:Instant), hasSource remappée sur E1 (vrai ancêtre CRM de S15), holdsBelief sur E2 (vrai ancêtre de I2), Proposition restaurée sur E1 (niveau NOnt), domaine E73 ajouté à hasFragment, suppression du niveau intermédiaire Entity (toutes les classes directement sous la racine)."@fr ;
+    owl:imports <https://gitlab.isl.ics.forth.gr/cidoc-crm/cidoc_crm_rdf/-/raw/master/7.1.1/CIDOC_CRM_v7.1.1.rdf> .
+
+:AudioFragment a owl:Class ;
+    rdfs:label "AudioFragment"@en ;
+    rdfs:comment "This class represents a temporal fragment of an audio recording, located by hasLocator with the #t=start,end syntax. No dedicated CRM anchor: the CRM has no audio class (E73 covers multimedia in its scope note); anchor possible later."@en,
+        "Fragment temporel d'un enregistrement audio, localisé par hasLocator avec la syntaxe #t=debut,fin. Sans ancrage CRM dédié : le CRM n'a pas de classe audio (E73 couvre le multimédia par sa scope note) ; ancrage possible plus tard."@fr ;
+    rdfs:subClassOf :MediaFragment .
+
+:Fabula a owl:Class ;
+    rdfs:label "Fabula"@en ;
+    rdfs:comment "This class represents the fabula of a narrative, i.e. the sequence of events in chronological order."@en,
+        "La fabula du récit : la suite des événements dans leur ordre chronologique, par opposition à l'ordre du discours (ordre de présentation). Ancrée sur E4_Period car une fabula est une période structurée ; les événements qui la composent sont reliés par causallyDependsOn."@fr ;
+    rdfs:subClassOf crm:E4_Period,
+        :Entity .
+
+:ImageFragment a owl:Class ;
+    rdfs:label "ImageFragment"@en ;
+    rdfs:comment "This class represents a spatial fragment of an image (a zone of a painting, a photograph, a frame of a video), located by hasLocator with the #xywh=x,y,w,h syntax. Anchored on E36 Visual Item (v2 decision, Nov 14, 2026): an image zone is itself an identifiable visual item, delimited within the full image by hasLocator."@en,
+        "Fragment spatial d'une image (zone d'un tableau, d'une photographie, image d'une vidéo), localisé par hasLocator avec la syntaxe #xywh=x,y,l,h. Ancré sur E36_Visual_Item (décision v2 du 14/11/2026) : une zone d'image est elle-même un objet visuel identifiable, délimité dans l'image complète par hasLocator."@fr ;
+    rdfs:subClassOf crm:E36_Visual_Item,
+        :MediaFragment .
+
+:Narration a owl:Class ;
+    rdfs:label "Narration"@en ;
+    rdfs:comment "This class represents the narration of a narrative, i.e. an individual work that tells the events of the narrative through some form of media (text, video, audio, etc.). Originally a subclass of the FRBRoo class F14 Individual Work; it is remapped here to its CRM ancestor E89 Propositional Object."@en,
+        "L'oeuvre qui raconte les événements du récit à travers un média quelconque (texte, vidéo, audio). C'est l'acte narratif, distinct du récit (Narrative) et de l'histoire (Fabula). Ancrée sur E89_Propositional_Object."@fr ;
+    rdfs:subClassOf crm:E89_Propositional_Object,
+        :Entity .
+
+:TextFragment a owl:Class ;
+    rdfs:label "TextFragment"@en ;
+    rdfs:comment "This class represents a textual fragment of a document (a passage of a transcript, a quotation, a page section), located by hasLocator with the #char=start,end syntax. It is the textual sibling of ImageFragment, AudioFragment and VideoFragment; like them, it is cited through the generic property hasFragment, the type living in the class (the former dedicated property hasTextFragment has been removed as redundant). Anchored on E33 Linguistic Object, the CRM class for texts, which is a subclass of E73 Information Object like all fragments."@en,
+        "Fragment textuel d'un document (passage de transcription, citation, section de page), localisé par hasLocator avec la syntaxe #char=debut,fin (RFC 5147, identifiants de fragment pour text/plain). Frère textuel d'ImageFragment, d'AudioFragment et de VideoFragment ; ancré sur E33_Linguistic_Object, la classe CRM du texte."@fr ;
+    rdfs:subClassOf crm:E33_Linguistic_Object,
+        :MediaFragment .
+
+:VideoFragment a owl:Class ;
+    rdfs:label "VideoFragment"@en ;
+    rdfs:comment "This class represents an audiovisual fragment of a video, located by hasLocator with the #t=start,end syntax (and #xywh= for a spatial crop within the image). No dedicated CRM anchor: the CRM has no video class; anchor possible later."@en,
+        "Fragment audiovisuel d'une vidéo, localisé par hasLocator avec la syntaxe #t=debut,fin (et #xywh= pour un cadrage dans l'image). Sans ancrage CRM dédié : le CRM n'a pas de classe vidéo ; ancrage possible plus tard."@fr ;
+    rdfs:subClassOf :MediaFragment .
+
+:after a owl:ObjectProperty ;
+    rdfs:label "after"@en ;
+    rdfs:comment "This property relates an instant to another instant that comes after it. From the original DL Narratives ontology (domain/range nar:Instant, alias of time:Instant), re-anchored on OWL-Time. Aligned on the current documentation on Nov 14, 2026: the equivalence to time:after is declared (the published .owl 2016 did not carry it). Together with before, it grounds the temporal reasoning (Allen relations) on the instants of the narrative."@en,
+        "Relie un instant à un autre instant qui le suit. Propriété de l'ontologie DL Narratives d'origine (domaine/range nar:Instant, alias de time:Instant), ré-ancrée sur OWL-Time. Alignée sur la documentation courante le 14/11/2026 : équivalence à time:after déclarée (le .owl publié de 2016 ne la portait pas). Avec before, elle fonde le raisonnement temporel (relations d'Allen) sur les instants du récit."@fr ;
+    rdfs:domain time:Instant ;
+    rdfs:range time:Instant ;
+    owl:equivalentProperty time:after .
+
+:before a owl:ObjectProperty ;
+    rdfs:label "before"@en ;
+    rdfs:comment "This property relates an instant to another instant that it precedes. From the original DL Narratives ontology (domain/range nar:Instant, alias of time:Instant), re-anchored on OWL-Time. Aligned on the current documentation on Nov 14, 2026: the equivalence to time:before is declared (the published .owl 2016 did not carry it). Together with after, it grounds the temporal reasoning (Allen relations) on the instants of the narrative."@en,
+        "Relie un instant à un autre instant qu'il précède. Propriété de l'ontologie DL Narratives d'origine (domaine/range nar:Instant, alias de time:Instant), ré-ancrée sur OWL-Time. Alignée sur la documentation courante le 14/11/2026 : équivalence à time:before déclarée (le .owl publié de 2016 ne la portait pas). Avec after, elle fonde le raisonnement temporel (relations d'Allen) sur les instants du récit."@fr ;
+    rdfs:domain time:Instant ;
+    rdfs:range time:Instant ;
+    owl:equivalentProperty time:before .
+
+:causallyDependsOn a owl:ObjectProperty ;
+    rdfs:label "causally depends on"@en ;
+    rdfs:comment "This property relates an event with another event that caused it. This property connects events that in normal discourse are predicated to have a cause-effect relation, e.g. the eruption of the Vesuvius caused the destruction of Pompeii."@en ;
+    rdfs:domain :Event ;
+    rdfs:range :Event .
+
+:hadParticipant a owl:ObjectProperty ;
+    rdfs:label "had participant"@en ;
+    rdfs:comment "This property relates an event with an actor participating in it, through the reification class ActorWithRole. The current documentation page declares this property equivalent to P11 had participant, but that equivalence is a defect of the doc itself (P11 ranges over E39 Actor; ActorWithRole is a reification node, not an actor): it would infer every ActorWithRole to be an E39. The module deliberately keeps the .owl 2016 signature (Event → ActorWithRole; the domain was recabled from E5 to nar:Event on Nov 14, 2026, ≡ E5 — neutral), without the P11 equivalence."@en ;
+    rdfs:domain :Event ;
+    rdfs:range :ActorWithRole .
+
+:hasDescription a owl:DatatypeProperty ;
+    rdfs:label "has description"@en,
+        "a pour description"@fr ;
+    rdfs:comment "This property relates an event to its descriptive text. From the original DL Narratives ontology (domain E5 Event, range xsd:string), recabled on Nov 14, 2026 on nar:Event (≡ E5 Event) — neutral for the reasoner, and more readable: NOnt properties point to NOnt classes."@en,
+        "Texte descriptif d'un événement. Propriété issue de l'ontologie DL Narratives d'origine (domaine E5_Event, range xsd:string), recâblée le 14/11/2026 sur nar:Event (≡ E5_Event) — neutre pour le raisonneur, et plus lisible : les propriétés NOnt pointent vers les classes NOnt."@fr ;
+    rdfs:domain :Event ;
+    rdfs:range xsd:string .
+
+:hasEntity a owl:ObjectProperty ;
+    rdfs:label "has entity"@en ;
+    rdfs:comment "This property relates an event to an entity involved in it."@en ;
+    rdfs:domain :Event ;
+    rdfs:range :Entity .
+
+:hasFragment a owl:ObjectProperty ;
+    rdfs:label "has fragment"@en ;
+    rdfs:comment "This property relates a proposition (or any information object) with a media fragment it is anchored in, whatever the medium (text, image, audio, video)."@en ;
+    rdfs:domain crm:E73_Information_Object ;
+    rdfs:range :MediaFragment .
+
+:hasLocator a owl:DatatypeProperty ;
+    rdfs:label "has locator"@en ;
+    rdfs:comment "This property locates a media fragment within its media object, locating the fragment in its media object: #t=start,end for temporal fragments (audio, video) and #xywh=x,y,w,h for spatial fragments (images) follow the W3C Media Fragments URI 1.0 syntax, while #char=start,end for textual fragments follows RFC 5147 (URI Fragment Identifiers for the text/plain Media Type). Each fragment class carries its locator syntax: TextFragment #char=, ImageFragment #xywh=, AudioFragment #t=, VideoFragment #t= (+ #xywh=)."@en ;
+    rdfs:domain :MediaFragment ;
+    rdfs:range xsd:anyURI .
+
+:hasReference a owl:ObjectProperty ;
+    rdfs:label "has reference"@en ;
+    rdfs:comment "This property relates a proposition with a reference fragment. For instance, the reference fragment \"Inferno II, 121\" refers to a specific part of the work \"Divine Comedy\". Two official versions diverge: the published .owl (2016, FRBRoo era) has Information_Object → Expression_Fragment (F23); the current documentation page (LRMoo refonte) has Symbolic_Object → Symbolic_Object (E90). Domain and range both aligned on E90 on Nov 14, 2026 by user decision, following the current documentation version."@en ;
+    rdfs:domain crm:E90_Symbolic_Object ;
+    rdfs:range crm:E90_Symbolic_Object .
+
+:hasRole a owl:ObjectProperty ;
+    rdfs:label "has role"@en ;
+    rdfs:comment "This property relates the class ActorWithRole with the role played by the actor."@en ;
+    rdfs:domain :ActorWithRole ;
+    rdfs:range :Role .
+
+:hasSource a owl:ObjectProperty ;
+    rdfs:label "has source"@en ;
+    rdfs:comment "This property directly relates a proposition with an observable entity. Originally the range was the CRMsci class S15 Observable Entity; it is remapped here to nar:Entity (alias ≡ E1_CRM_Entity, the CRM ancestor of S15; CRMsci: S15 ∊ E1, with E5 ∊ S15). Recabled on Nov 14, 2026: domains and ranges now point to the nar: classes (Event ≡ E5, Entity ≡ E1), neutral for the reasoner."@en,
+        "Relie directement une proposition à une entité observable. À l'origine la range était la classe CRMsci S15 Observable Entity ; elle est remappée ici sur nar:Entity (alias ≡ E1_CRM_Entity, l'ancêtre CRM de S15 ; CRMsci : S15 ∊ E1, avec E5 ∊ S15) ; S15 est une classe de CRMsci, et non de CRMinf. Recâblée le 14/11/2026 : les domaines et ranges pointent désormais vers les classes nar: (Event ≡ E5, Entity ≡ E1), neutre pour le raisonneur."@fr ;
+    rdfs:domain crm:E73_Information_Object ;
+    rdfs:range :Entity .
+
+:hasSubject a owl:ObjectProperty ;
+    rdfs:label "has subject"@en ;
+    rdfs:comment "This property relates the class ActorWithRole with the class E39 Actor."@en ;
+    rdfs:domain :ActorWithRole ;
+    rdfs:range crm:E39_Actor .
+
+:hasText a owl:ObjectProperty ;
+    rdfs:label "has text"@en ;
+    rdfs:comment "This property relates a narrative to the text that expresses it."@en ;
+    rdfs:domain :Narrative ;
+    rdfs:range crm:E90_Symbolic_Object .
+
+:holdsBelief a owl:ObjectProperty ;
+    rdfs:label "holds belief"@en ;
+    rdfs:comment "This property relates an actor to the belief held by him/her. Originally the range was the CRMinf class I2 Belief; it is remapped here to E2_Temporal_Entity, the CRM ancestor of I2 (CRMinf: I2 ∊ E2 Temporal Entity): a belief is the period during which an actor holds a set of propositions to be true."@en,
+        "Relie un acteur à la croyance qu'il tient. À l'origine la range était la classe CRMinf I2 Belief ; elle est remappée ici sur E2_Temporal_Entity, l'ancêtre CRM de I2 (CRMinf : I2 ∊ E2 Temporal Entity) : une croyance est la période pendant laquelle un acteur tient un ensemble de propositions pour vraies."@fr ;
+    rdfs:domain crm:E39_Actor ;
+    rdfs:range crm:E2_Temporal_Entity .
+
+:instantEquals a owl:ObjectProperty ;
+    rdfs:label "instant equals"@en ;
+    rdfs:comment "This property relates an instant with another instant that is equal to it. This is needed to match uncertain instants that are inferred to be the same by the reasoner. The class time:Instant belongs to OWL-Time, which is referenced here but not imported."@en ;
+    rdfs:domain time:Instant ;
+    rdfs:range time:Instant .
+
+:isAboutCountry a owl:ObjectProperty ;
+    rdfs:label "is about country"@en ;
+    rdfs:comment "This property relates a narrative with a country. Domain and range aligned on the current documentation version (Nov 14, 2026): Narrative → Place (E53). The published .owl (2016) had the generic P129 signature (E89 → E1); both remain legal under P129 (Narrative ⊑ E73 ⊑ E89, E53 ⊑ E1)."@en ;
+    rdfs:domain :Narrative ;
+    rdfs:range crm:E53_Place ;
+    rdfs:subPropertyOf crm:P129_is_about .
+
+:isAboutLAU a owl:ObjectProperty ;
+    rdfs:label "is about LAU"@en ;
+    rdfs:comment "This property relates a narrative with a LAU (Local Administrative Unit). Domain and range aligned on the current documentation version (Nov 14, 2026): Narrative → Entity (E1). The published .owl (2016) had the generic P129 signature (E89 → E1); both remain legal under P129 (Narrative ⊑ E73 ⊑ E89)."@en ;
+    rdfs:domain :Narrative ;
+    rdfs:range :Entity ;
+    rdfs:subPropertyOf crm:P129_is_about .
+
+:isEntityOf a owl:ObjectProperty ;
+    rdfs:label "is entity of"@en ;
+    rdfs:comment "This property relates an entity to the event it is involved in."@en ;
+    rdfs:domain :Entity ;
+    rdfs:range :Event .
+
+:isPresentedBefore a owl:ObjectProperty ;
+    rdfs:label "is presented before"@en ;
+    rdfs:comment "This property relates an event to another event presented before it."@en ;
+    rdfs:domain :Event ;
+    rdfs:range :Event .
+
+:partOfNarrative a owl:ObjectProperty ;
+    rdfs:label "part of narrative"@en ;
+    rdfs:comment "This property relates an event to the narrative that contains it."@en ;
+    rdfs:domain :Event ;
+    rdfs:range :Narrative .
+
+:propObject a owl:ObjectProperty ;
+    rdfs:label "prop object"@en ;
+    rdfs:comment "This property relates a proposition to its object (a CRM entity)."@en ;
+    rdfs:domain :Proposition ;
+    rdfs:range :Entity .
+
+:propPredicate a owl:ObjectProperty ;
+    rdfs:label "prop predicate"@en ;
+    rdfs:comment "This property relates a proposition to its predicate (a property)."@en ;
+    rdfs:domain :Proposition ;
+    rdfs:range owl:ObjectProperty .
+
+:propSubject a owl:ObjectProperty ;
+    rdfs:label "prop subject"@en ;
+    rdfs:comment "This property relates a proposition to its subject (an event)."@en ;
+    rdfs:domain :Proposition ;
+    rdfs:range :Event .
+
+:Role a owl:Class ;
+    rdfs:label "Role"@en ;
+    rdfs:comment "This class represents a role in the event."@en,
+        "Le rôle joué par un acteur dans un événement (orateur, témoin, décideur...). Classe cible de hasRole depuis ActorWithRole ; créée pour que le rôle soit typé et réutilisable d'un événement à l'autre, indépendamment de l'acteur qui l'endosse."@fr ;
+    rdfs:subClassOf :Entity .
+
+:ActorWithRole a owl:Class ;
+    rdfs:label "ActorWithRole"@en ;
+    rdfs:comment "In order to assign a role to an actor, this reification class was introduced. Through the property hadParticipant an event is related with this class. ActorWithRole is related with the class E39 Actor through the property hasSubject, and to a role through the property hasRole."@en,
+        "Réification du couple (acteur, rôle) dans un événement : un événement (E5) relie un ActorWithRole par hadParticipant, qui pointe l'acteur (E39) par hasSubject et son rôle (Role) par hasRole. Cette classe a été créée parce qu'une arête directe Event-Acteur perdrait le rôle joué : le noeud intermédiaire conserve l'information."@fr ;
+    rdfs:subClassOf :Entity .
+
+:Proposition a owl:Class ;
+    rdfs:label "Proposition"@en ;
+    rdfs:comment "This class represents a proposition endowed with a subject, predicate, and object."@en,
+        "Triplet réifié sujet-prédicat-objet : une affirmation élémentaire du récit. propSubject pointe l'événement sujet, propPredicate la propriété-prédicat, propObject l'entité objet. Noeud de réification pur, ancré sur nar:Entity (≡ E1_CRM_Entity) comme dans l'ontologie DL Narratives d'origine (où il est sous Entity), sans autre ancrage CRM. Créée pour que toute affirmation soit un noeud du graphe, citable par hasFragment, sourçable par hasSource et référencable par hasReference."@fr ;
+    rdfs:subClassOf :Entity .
+
+:Narrative a owl:Class ;
+    rdfs:label "Narrative"@en ;
+    rdfs:comment "This class represents a narrative."@en,
+        "Le récit lui-même, comme objet d'information : une mise en récit d'événements. Il est exprimé par hasText, situé dans l'espace par isAboutCountry et isAboutLAU (sous-propriétés de P129_is_about), et contient les événements qui le référencent par partOfNarrative."@fr ;
+    rdfs:subClassOf crm:E73_Information_Object,
+        :Entity .
+
+time:Instant a owl:Class .
+
+:MediaFragment a owl:Class ;
+    rdfs:label "MediaFragment"@en ;
+    rdfs:comment "This class represents a delimited part of a media object, whatever the medium (text, image, audio, video). A fragment is an interpretive node: deciding where the cited portion begins and ends is an analyst's choice. The whole media object the fragment comes from is not a class of this module: it is represented by the bare CRM classes (E73 Information Object for a digital file, E24 Physical Human-Made Thing for a physical carrier), related to the fragment by P106i_forms_part_of or P128_carries. Its four subclasses carry the medium: TextFragment (E33), ImageFragment (E36), AudioFragment and VideoFragment (no dedicated CRM anchor)."@en,
+        "Partie délimitée d'un média, quel que soit le support (texte, image, audio, vidéo). Le fragment est un noeud interprétatif : décider où commence et finit la portion citée est un choix d'analyste. Il est localisé dans son média par hasLocator (syntaxe W3C Media Fragments), rattaché au média complet par P106i_forms_part_of (lorsque le média est lui-même un objet d'information, ex. fichier numérique ; pour un support physique, le média porte l'information par P128_carries), et cité par une proposition via hasFragment. Ses quatre sous-classes portent le média : TextFragment (E33), ImageFragment (E36), AudioFragment et VideoFragment (sans ancrage CRM dédié)."@fr ;
+    rdfs:subClassOf crm:E73_Information_Object,
+        :Entity .
+
+:Event a owl:Class ;
+    rdfs:label "Event"@en ;
+    rdfs:comment "This class represents an event. Equivalent to the CRM class E5 Event, as in the published NOnt (the equivalence was restored on Nov 14, 2026: harmless since the Entity root is itself ≡ E1; the module previously used a subclass so that the CRM events would not be merged into nar:Event)."@en,
+        "L'atome du récit : ce qui se passe, équivalent de E5_Event du CRM (équivalence ≡ E5 rétablie le 14/11/2026, conformément à la NOnt publiée — inoffensive puisque la racine Entity est elle-même ≡ E1 ; le module utilisait auparavant ⊑ E5 pour éviter que les événements CRM ne fusionnent dans nar:Event). Les événements s'enchaînent par isPresentedBefore (ordre du discours) et causallyDependsOn (chaîne causale), appartiennent à un Narrative par partOfNarrative, portent leurs participants par hadParticipant et les entités impliquées par hasEntity (réciproque isEntityOf)."@fr ;
+    rdfs:subClassOf :Entity ;
+    owl:equivalentClass crm:E5_Event .
+
+:Entity a owl:Class ;
+    rdfs:label "Entity"@en,
+        "Entité"@fr ;
+    rdfs:comment "Root of the narrative module: everything the ontology defines is an Entity of the documentary and narrative world. Pure alias of E1_CRM_Entity, as the Entity of the published NOnt (Nov 14, 2026 decision: the former bare local root Element is renamed to Entity and anchored ≡ E1, so that the Event ≡ E5 equivalence propagates no pollution — E5 ⊑ E1 already holds in the CRM). Pure regroupment class: it carries no facts."@en,
+        "Racine du module narratif : tout ce que l'ontologie définit est une Entity, une entité du monde documentaire et narratif. Alias pur de E1_CRM_Entity, comme l'Entity de la NOnt publiée (décision du 14/11/2026 : la racine locale Element, auparavant sans ancre CRM, est renommée Entity et ancrée ≡ E1, pour que l'équivalence Event ≡ E5 ne propage plus de pollution — E5 ⊑ E1 est déjà vrai dans le CRM). Classe de pure organisation : elle ne porte aucun fait."@fr ;
+    owl:equivalentClass crm:E1_CRM_Entity .
+
+owl:ObjectProperty a owl:Class .
+
